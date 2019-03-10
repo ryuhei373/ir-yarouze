@@ -9,22 +9,46 @@
         My supreme Nuxt.js project
       </h2>
       <div class="links">
-        <button 
-          class="bg-transparent hover:bg-blue text-blue-dark font-semibold hover:text-white py-2 px-4 border border-blue hover:border-transparent rounded" 
-          @click="googleLogin">sign in with google</button>
+        <Home v-if="!isLogin"/>
+        <Mypage 
+          v-if="isLogin" 
+          :user="userData"/>
       </div>
     </div>
   </section>
 </template>
 
 <script>
+import firebase from '~/plugins/firebase'
 import Logo from '~/components/Logo.vue'
+import Home from '~/components/Home.vue'
+import Mypage from '~/components/Mypage.vue'
 
 export default {
   components: {
-    Logo
+    Logo,
+    Home,
+    Mypage
   },
-
+  asyncData(context) {
+    // コンポーネントをロードする前に毎回呼び出されます
+    return { name: 'Hello, World！！', isLogin: false, userData: null }
+  },
+  fetch() {
+    // `fetch` メソッドはページの描画前にストアを満たすために使用されます
+  },
+  mounted: function() {
+    firebase.auth().onAuthStateChanged(user => {
+      console.log(user)
+      if (user) {
+        this.isLogin = true
+        this.userData = user
+      } else {
+        this.isLogin = false
+        this.userData = null
+      }
+    })
+  },
   methods: {
     googleLogin: function() {
       firebase.auth().signInWithRedirect(new firebase.auth.GoogleAuthProvider())
