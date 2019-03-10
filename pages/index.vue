@@ -1,13 +1,9 @@
 <template>
   <section class="container">
     <div>
-      <logo/>
       <h1 class="title">
-        ir-yarouze
+        ログインテスト
       </h1>
-      <h2 class="subtitle">
-        My supreme Nuxt.js project
-      </h2>
       <div class="links">
         <Home v-if="!isLogin"/>
         <Mypage 
